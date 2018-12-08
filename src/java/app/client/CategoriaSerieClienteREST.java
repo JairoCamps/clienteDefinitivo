@@ -65,7 +65,7 @@ public class CategoriaSerieClienteREST {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findRange_JSON(Class<T> responseType, String from, String to) throws ClientErrorException {
+    public <T> T findRange_JSON(Class<T> responseType, String from, Integer to) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{from, to}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -80,6 +80,18 @@ public class CategoriaSerieClienteREST {
     public <T> T findCategoriasByIdSerieIntermedio_JSON(Class<T> responseType, String idSerie) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("categoriasByIdSerieIntermedio/{0}", new Object[]{idSerie}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+    
+    public <T> T findSeriesByIdCategoriaIntermedio_XML(Class<T> responseType, String idCategoria) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("seriesByIdCategoriaIntermedio/{0}", new Object[]{idCategoria}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findSeriesByIdCategoriaIntermedio_JSON(Class<T> responseType, String idCategoria) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("seriesByIdCategoriaIntermedio/{0}", new Object[]{idCategoria}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 

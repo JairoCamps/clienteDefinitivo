@@ -42,7 +42,7 @@ public class EditarBean {
     public void init(){
         serie = this.getSerieById(String.valueOf(indexBean.serieIdSeleccionada));
         listaCategorias = indexBean.getListaCategoria();
-        listaCategoriasSeleccionadas = this.getCategoriasByIdSerie(String.valueOf(serie.getIdSerie()));       
+        listaCategoriasSeleccionadas = this.getCategoriasByIdSerie(serie.getIdSerie().toString());       
     }
 
     public Serie getSerie() {
@@ -102,37 +102,6 @@ public class EditarBean {
         return null;
     }
     
-    private Categoria getCategoriaById(String id){
-        CategoriaClienteREST categoriaCliente = new CategoriaClienteREST();
-        Response r = categoriaCliente.find_XML(Response.class, id);
-        if (r.getStatus() == 200) {
-            GenericType<Categoria> genericType = new GenericType<Categoria>(){};
-            Categoria c = r.readEntity(genericType);
-            return c;
-        }
-        return null;
-    }
-    
-    private List<Serie> getSeriesByIdCategoria(String idCategoria) {
-        SerieClienteREST serieCliente = new SerieClienteREST();
-        Response r = serieCliente.findSeriesByIdCategoria_XML(Response.class, idCategoria);
-        if (r.getStatus() == 200) {
-            GenericType<List<Serie>> genericType = new GenericType<List<Serie>>(){};
-            List<Serie> series = r.readEntity(genericType);
-            return series;
-        }
-        return null;
-    }
-    
-    private void editarSerie (String id){
-        SerieClienteREST serieCliente = new SerieClienteREST();
-        serieCliente.edit_XML(serie, id);
-    }
-    
-    private void editarCategoria (Categoria cat, String id){
-        CategoriaClienteREST categoriaCliente = new CategoriaClienteREST();
-        categoriaCliente.edit_XML(cat, id);
-    }
     
     private void createCategoriaserie(Categoriaserie cs){
         CategoriaSerieClienteREST cscliente = new CategoriaSerieClienteREST();
@@ -143,31 +112,12 @@ public class EditarBean {
         
         
         for(Categoria c : listaCategoriasSeleccionadas){
-            Categoria x = getCategoriaById(c.getIdCategoria().toString());
             
-            List<Categoriaserie> csList = x.getCategoriaserieList();
-            if(csList == null) { csList = new ArrayList<>();}
             Categoriaserie nuevaCs = new Categoriaserie();
-            nuevaCs.setCategoriaidCategoria(x);
+            nuevaCs.setCategoriaidCategoria(c);
             nuevaCs.setSerieidSerie(serie);
             createCategoriaserie(nuevaCs);
-            
-            
-            csList.add(nuevaCs);
-            
-            List<Categoriaserie> csList2 = x.getCategoriaserieList();
-            if(csList2== null) { csList2 = new ArrayList<>();}
-            csList2.add(nuevaCs);
-            serie.setCategoriaserieList(csList2);
-            
-            editarCategoria(x, x.getIdCategoria().toString());
-            editarSerie(serie.getIdSerie().toString());
         }
-       
-        
-        
-        editarSerie(serie.getIdSerie().toString());
-        System.out.println("POLLAS");
         
         indexBean.init();
         return "index?faces-redirect=true";

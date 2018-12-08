@@ -6,6 +6,7 @@
 package app.bean;
 
 import app.client.CategoriaClienteREST;
+import app.client.CategoriaSerieClienteREST;
 import app.client.SerieClienteREST;
 import app.entity.Categoria;
 import app.entity.Serie;
@@ -108,8 +109,8 @@ public class IndexBean implements Serializable {
     }
 
     private List<Serie> getSeriesByIdCategoria(String idCategoria) {
-        SerieClienteREST serieCliente = new SerieClienteREST();
-        Response r = serieCliente.findSeriesByIdCategoria_XML(Response.class, idCategoria);
+        CategoriaSerieClienteREST categoriaSerieCliente = new CategoriaSerieClienteREST();
+        Response r = categoriaSerieCliente.findSeriesByIdCategoriaIntermedio_XML(Response.class, idCategoria);
         if (r.getStatus() == 200) {
             GenericType<List<Serie>> genericType = new GenericType<List<Serie>>(){};
             List<Serie> series = r.readEntity(genericType);
