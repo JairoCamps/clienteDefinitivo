@@ -92,8 +92,8 @@ public class EditarBean {
     }
     
     private List<Categoria> getCategoriasByIdSerie(String id){
-        SerieClienteREST serieCliente = new SerieClienteREST();
-        Response r = serieCliente.findCategoriasByIdSerie_XML(Response.class, id);
+        CategoriaSerieClienteREST csCliente = new CategoriaSerieClienteREST();
+        Response r = csCliente.findCategoriasByIdSerieIntermedio_XML(Response.class, id);
         if (r.getStatus() == 200) {
             GenericType<List<Categoria>> genericType = new GenericType<List<Categoria>>(){};
             List<Categoria> l = r.readEntity(genericType);
