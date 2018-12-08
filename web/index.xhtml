@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Series</title>
+        <!-- Parámetros necesarios para Oauth -->
+        <meta charset='utf-8' />
+        <meta name="google-signin-client_id" content="35516512073-md7a4298ahau8spg0t83u6rf2krmeq3k.apps.googleusercontent.com"/>
+
+        <!-- Librerías para estilo  -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+        <!-- Librería propia con funciones para el cierre de sesión -->
+        <h:outputScript library="js" name="logoutUtils.js"/>
+
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" ></script>
+
+    </h:head>
+
+    <h:body>
+
+        <!-- Cabecera añadida por Pedro --> 
+
+        <div class="jumbotron" style="background-color: #39CCCC ">
+            <div class="container">
+                <h1>Bienvenido a DComics #{loginBean.emailUser}</h1> 
+                <b>Tu aplicación para gestión de series de comics.</b> 
+            </div>
+            <img src="#{loginBean.imageUrl}" align="right" class="rounded-circle"/>
+        </div>
+
+        <nav class="navbar navbar-light bg-light justify-content-between">
+
+            <a class="navbar-brand">Índice de Cómics</a>
+            <h:form class="form-inline">
+
+                <h:inputText required ="true" class="form-control mr-sm-2" pt:placeholder="Crear Categoría" value="#{createCategoriaBean.c.nombre}"/>
+                <h:commandButton class="btn btn-success" value="Crear" action="#{createCategoriaBean.crearCategoria(createCategoriaBean.c.nombre)}"/>
+
+                <h:link outcome="login"  id="linkLogout" class="btn btn-danger" value="Cerrar Sesión" onclick="signOut();" rendered="#{not empty loginBean.emailUser}"/>
+            </h:form>
+        </nav>
+
+
+        <h:form>
+            <p:remoteCommand name="logoutMB" actionListener="#{loginBean.logout()}" id="remote_action" autoRun="false"  process="@this" update="@this"></p:remoteCommand>
+        </h:form>
+
+        <!-- Fin cabecera añadida por Pedro -->
+        <div class="container">
+            <h1 align="center">Lista de Series </h1> 
+            <h:form>
+                <h:selectOneMenu value="#{indexBean.categoriaIdSeleccionada}">
+                    <f:selectItem itemLabel="Todas las Categorías" itemValue="" />
+                    <f:selectItems value="#{indexBean.listaCategoria}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.idCategoria}"/>
+                    <f:ajax event="valueChange" listener="#{indexBean.actualizarTabla()}" render="@all"/>
+                </h:selectOneMenu>
+            </h:form>
+            <hr></hr>
+            <br></br>
+
+
+            <div class="table-responsive .table-hover">
+                <h:form >
+
+                    <h:dataTable id="tabla" class="table table-striped" var="serie" value="#{indexBean.listaSeries}">
+                        <h:column>
+                            <f:facet name="header">ID</f:facet>
+                            <h:outputText value="#{serie.idSerie}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Nombre</f:facet>
+                            <h:link outcome="verSerieComics" >
+                                <h:outputText value="#{serie.nombre}" />
+                                <f:param name="idSerie" value="#{serie.idSerie}" />
+                            </h:link>
+
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Autor</f:facet>
+                            <h:outputText value="#{serie.autor}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Descripción</f:facet>
+                            <h:outputText value="#{serie.descripcion}" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Fecha</f:facet>
+                            <h:outputText value="#{serie.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Editar</f:facet>
+                            <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}" />
+                            <h:commandButton class="btn btn-primary" value="Editar" action="#{indexBean.doEdit(serie.idSerie)}" rendered="#{not loginBean.loginInvitado}"></h:commandButton>
+                        </h:column>
+                    </h:dataTable>
+
+                </h:form>
+            </div>
+        </div>
+        <br />
+        
+    </h:body>
+</html>

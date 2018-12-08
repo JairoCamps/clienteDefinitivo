@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Editar Serie</title>
+    </h:head>
+    <h:body>
+
+        <!-- ESTILO =================================== -->
+         <h1 align="center">Editar Serie</h1>
+        <hr></hr>
+        <br></br>
+        
+        <style type="text/css">
+                .ui-button{
+                height:25px;
+            }
+                .ui-widget {
+                font-size: 13px;
+            }           font-family:verdana
+
+            .color {
+                background-color: #cccccc !important;
+            background-image: none !important;
+            color: #000000 !important;
+            }
+        </style>
+        
+        <!-- ESTILO =================================== -->
+        
+        <h:form>
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel for="nombre" value="Nombre:" style="font-weight:bold" />
+                <p:inputText id="nombre" value="#{editarBean.serie.nombre}" />
+                
+                <h:outputLabel for="autor" value="Autor:" style="font-weight:bold" />
+                <p:inputText id="autor" value="#{editarBean.serie.autor}" />
+                
+                <h:outputLabel for="descripcion" value="Descripción:" style="font-weight:bold" />
+                <p:inputTextarea rows="6" cols="33" value="#{editarBean.serie.descripcion}" />
+                
+                <p:outputLabel for="fecha" value="Fecha:" style="font-weight:bold" />
+                <p:calendar id="fecha" value="#{editarBean.serie.fecha}" showOn="button" />
+                
+                <p:outputLabel for="categorias" value="Categorias:" style="font-weight:bold" />
+                <p:selectManyCheckbox id="categorias" value="#{editarBean.listaCategoriasSeleccionadas}" layout="grid" columns="3">
+                    <f:selectItems value="#{editarBean.listaCategorias}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria}"/>
+                    <f:converter converterId="categoriaToStringConverter" />
+                </p:selectManyCheckbox>
+            </h:panelGrid>           
+            <h:commandButton value="Editar" action="#{editarBean.doEditar()}" />
+        </h:form>
+        
+    </h:body>
+</html>
+

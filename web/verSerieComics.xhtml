@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+     <h:head>
+        
+        <!-- Parámetros necesarios para Oauth -->
+        <meta charset='utf-8' />
+        <meta name="google-signin-client_id" content="35516512073-md7a4298ahau8spg0t83u6rf2krmeq3k.apps.googleusercontent.com"/>
+        
+        <!-- Librerías para estilo  -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- Librería platfrom de google -->
+        
+        <!-- Librería propia con funciones para el cierre de sesión -->
+        <h:outputScript library="js" name="logoutUtils.js"/>
+        
+         <script src="https://apis.google.com/js/platform.js?onload=onLoad" ></script>
+         <script type="text/javascript" src="resources/js/jquery-3.3.1.min.js"></script>
+        
+        <title> #{verSerieBean.serie.nombre}</title>
+    </h:head>
+    <h:body>
+         <div class="jumbotron" style="background-color: #39CCCC ">
+            <div class="container">
+                <h1>Bienvenido a DComics #{loginBean.emailUser}</h1> 
+                <b>Tu aplicación para gestión de series de comics.</b> 
+            </div>
+            <img src="#{loginBean.imageUrl}" align="right" class="rounded-circle"/>
+        </div>
+         
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <a class="navbar-brand">#{verSerieBean.serie.nombre}</a>
+            <h:form class="form-inline">
+                <h:link outcome="login"  id="linkLogout" class="btn btn-outline-danger" value="Cerrar Sesión" onclick="signOut();" rendered="#{not empty loginBean.emailUser}"/>
+            </h:form>
+        </nav>
+        
+        <h:form>
+            <p:remoteCommand name="logoutMB" actionListener="#{loginBean.logout()}" id="remote_action" autoRun="false"  process="@this" update="@this"></p:remoteCommand>
+        </h:form>
+        
+       <div class="container table-responsive">
+           <table class="table table-hover">
+            <thead>
+                <tr>
+                 <th scope="col">#</th>
+                 <th scope="col">Nombre</th>
+                 <th scope="col">Descripcion</th>
+                 <th scope="col">Autor</th>
+                 <th scope="col">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>#{verSerieBean.serie.idSerie}</td>
+                <td>#{verSerieBean.serie.nombre}</td>
+                <td>#{verSerieBean.serie.descripcion}</td>
+                <td>#{verSerieBean.serie.autor}</td>
+                <td>#{verSerieBean.serie.fecha}</td>
+            </tr>
+            </tbody>
+        </table>
+       </div> 
+        
+        <h2 align="center">Otras series del autor</h2>
+        <div class="container" id="marvel">
+            
+        </div>
+        
+        
+        
+        
+        <h:outputScript library="js" name="marvelUtil.js"/>
+    </h:body>
+</html>
+
