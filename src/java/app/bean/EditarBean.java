@@ -108,9 +108,35 @@ public class EditarBean {
         cscliente.create_JSON(cs);
     }
     
+    private void editarSerie (String id){
+        SerieClienteREST serieCliente = new SerieClienteREST();
+        serieCliente.edit_XML(serie, id);
+    }
+    
+    private void eliminarCats (String idSerie){
+        CategoriaSerieClienteREST csCliente = new CategoriaSerieClienteREST();
+        Response r = csCliente.findIntermediaByIdSerie_XML(Response.class, idSerie);
+        List<Categoriaserie> l;
+        if (r.getStatus() == 200) {
+            GenericType<List<Categoriaserie>> genericType = new GenericType<List<Categoriaserie>>(){};
+            l = r.readEntity(genericType);   
+        }else{
+            l = null;
+        }
+        
+        if (l != null){
+            for (Categoriaserie cs : l){
+                csCliente.remove(cs.getIdCategoriaSerie().toString());
+            }
+        }
+        
+    }
+    
     public String doEditar(){
         
-        
+        editarSerie(serie.getIdSerie().toString());
+        eliminarCats(serie.getIdSerie().toString());
+              
         for(Categoria c : listaCategoriasSeleccionadas){
             
             Categoriaserie nuevaCs = new Categoriaserie();
@@ -118,6 +144,8 @@ public class EditarBean {
             nuevaCs.setSerieidSerie(serie);
             createCategoriaserie(nuevaCs);
         }
+        
+        
         
         indexBean.init();
         return "index?faces-redirect=true";

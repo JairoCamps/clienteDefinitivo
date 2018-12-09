@@ -65,7 +65,7 @@ public class CategoriaSerieClienteREST {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findRange_JSON(Class<T> responseType, String from, Integer to) throws ClientErrorException {
+    public <T> T findRange_JSON(Class<T> responseType, String from, String to) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{from, to}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -82,7 +82,27 @@ public class CategoriaSerieClienteREST {
         resource = resource.path(java.text.MessageFormat.format("categoriasByIdSerieIntermedio/{0}", new Object[]{idSerie}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
-    
+
+    public void create_XML(Object requestEntity) throws ClientErrorException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    }
+
+    public void create_JSON(Object requestEntity) throws ClientErrorException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+    }
+
+    public <T> T findIntermediaByIdSerie_XML(Class<T> responseType, String idSerie) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("intermediaByIdSerie/{0}", new Object[]{idSerie}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findIntermediaByIdSerie_JSON(Class<T> responseType, String idSerie) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("intermediaByIdSerie/{0}", new Object[]{idSerie}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
     public <T> T findSeriesByIdCategoriaIntermedio_XML(Class<T> responseType, String idCategoria) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("seriesByIdCategoriaIntermedio/{0}", new Object[]{idCategoria}));
@@ -93,14 +113,6 @@ public class CategoriaSerieClienteREST {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("seriesByIdCategoriaIntermedio/{0}", new Object[]{idCategoria}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-    }
-
-    public void create_XML(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
-    }
-
-    public void create_JSON(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
     public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {

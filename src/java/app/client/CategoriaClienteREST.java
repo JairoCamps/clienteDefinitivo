@@ -14,13 +14,13 @@ import javax.ws.rs.client.WebTarget;
  * [app.entity.categoria]<br>
  * USAGE:
  * <pre>
-        CategoriaClienteREST client = new CategoriaClienteREST();
-        Object response = client.XXX(...);
-        // do whatever with response
-        client.close();
- </pre>
+ *        CategoriaClienteREST client = new CategoriaClienteREST();
+ *        Object response = client.XXX(...);
+ *        // do whatever with response
+ *        client.close();
+ * </pre>
  *
- * @author ofviak
+ * @author Jairo
  */
 public class CategoriaClienteREST {
 
@@ -33,10 +33,12 @@ public class CategoriaClienteREST {
         webTarget = client.target(BASE_URI).path("app.entity.categoria");
     }
 
-    public String countREST() throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path("count");
-        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
+    public <T> T findCategoriaByNombre(Class<T> responseType, String nombre) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("findCategoriaByName/{0}", new Object[]{nombre})).request().post(null, responseType);
+    }
+
+    public <T> T findSeriesByCategoriaName(Class<T> responseType, String nombre) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("findSeriesByCategoriaName/{0}", new Object[]{nombre})).request().post(null, responseType);
     }
 
     public void edit_XML(Object requestEntity, String id) throws ClientErrorException {
@@ -45,18 +47,6 @@ public class CategoriaClienteREST {
 
     public void edit_JSON(Object requestEntity, String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
-    }
-
-    public <T> T find_XML(Class<T> responseType, String id) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
-    public <T> T find_JSON(Class<T> responseType, String id) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     public <T> T findRange_XML(Class<T> responseType, String from, String to) throws ClientErrorException {
@@ -71,16 +61,16 @@ public class CategoriaClienteREST {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public void create_XML(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
-    }
-
-    public void create_JSON(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+    public <T> T selectCategoriaOrdenado(Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("selectCategoriaOrdenado").request().post(null, responseType);
     }
 
     public <T> T createCategoriaByNombre(Class<T> responseType, String nombre) throws ClientErrorException {
         return webTarget.path(java.text.MessageFormat.format("categoriaByNombre/{0}", new Object[]{nombre})).request().post(null, responseType);
+    }
+
+    public <T> T findIdCategoriaByNombre(Class<T> responseType, String nombre) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("findIdCategoriaByName/{0}", new Object[]{nombre})).request().post(null, responseType);
     }
 
     public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
@@ -97,10 +87,46 @@ public class CategoriaClienteREST {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
+    public <T> T findCategoriaByIdCategoria(Class<T> responseType, String id) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("findCategoriaByIdCategoria/{0}", new Object[]{id})).request().post(null, responseType);
+    }
+
+    public String countREST() throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path("count");
+        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
+    }
+
+    public <T> T find_XML(Class<T> responseType, String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T find_JSON(Class<T> responseType, String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
+    public void create_XML(Object requestEntity) throws ClientErrorException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    }
+
+    public void create_JSON(Object requestEntity) throws ClientErrorException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+    }
+
+    public <T> T selectCategoriaByIdSerie(Class<T> responseType, String id) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("selectCategoriaByIdSerie/{0}", new Object[]{id})).request().post(null, responseType);
+    }
+
+    public <T> T deleteCategoriaByName(Class<T> responseType, String nombre) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("deleteCategoriaByName/{0}", new Object[]{nombre})).request().post(null, responseType);
+    }
+
     public void close() {
         client.close();
     }
-    
-    
     
 }
