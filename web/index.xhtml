@@ -109,6 +109,11 @@
                             <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}" />
                             <h:commandButton class="btn btn-primary" value="Editar" action="#{indexBean.doEdit(serie.idSerie)}" rendered="#{not loginBean.loginInvitado}"></h:commandButton>
                         </h:column>
+                        <h:column>
+                            <f:facet name="header">Borrar</f:facet>
+                            <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}" />
+                            <h:commandButton class="btn btn-primary" value="Borrar" action="#{indexBean.doBorrar(serie.idSerie)}" rendered="#{not loginBean.loginInvitado}"></h:commandButton>
+                        </h:column>
                     </h:dataTable>
 
                 </h:form>

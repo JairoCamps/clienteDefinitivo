@@ -35,6 +35,8 @@ public class EditarBean {
     protected List<Categoria> listaCategorias;
     protected List<Categoria> listaCategoriasSeleccionadas;
     
+    private String cabeceraString;
+    
     public EditarBean() {
     }
     
@@ -45,11 +47,17 @@ public class EditarBean {
         if(indexBean.serieIdSeleccionada != -1){
             serie = this.getSerieById(String.valueOf(indexBean.serieIdSeleccionada));
             listaCategoriasSeleccionadas = this.getCategoriasByIdSerie(serie.getIdSerie().toString());
+            //ponemos la cabecera
+            setCabeceraString("Editar Serie");
         }else{
             serie= new Serie();
+            setCabeceraString("Crear Serie");
         }  
     }
-
+    
+    public void setCabeceraString(String cabeceraString) { this.cabeceraString = cabeceraString; }
+    public String getCabeceraString(){ return cabeceraString; }
+    
     public Serie getSerie() {
         return serie;
     }
@@ -81,9 +89,6 @@ public class EditarBean {
     public void setListaCategorias(List<Categoria> listaCategorias) {
         this.listaCategorias = listaCategorias;
     }
-    
-    
-
     
     private Serie getSerieById(String id) {
         SerieClienteREST serieCliente = new SerieClienteREST();

@@ -9,6 +9,7 @@ import app.client.CategoriaClienteREST;
 import app.client.CategoriaSerieClienteREST;
 import app.client.SerieClienteREST;
 import app.entity.Categoria;
+import app.entity.Categoriaserie;
 import app.entity.Serie;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -127,4 +128,51 @@ public class IndexBean implements Serializable {
         this.setSerieIdSeleccionada(idSerie);
         return "editarSerie?faces-redirect=true";
     }
+    
+     public String doBorrar(Integer idSerie){   
+        //borramos las Categoriaserie de la base de datos
+         removeCategoriaSerie(idSerie);
+               
+        //borramos la serie de la base de datos
+         removeSerie(idSerie);
+         
+         //actualizamos la tabla
+         actualizarTabla();
+        return "/index.xhtml?faces-redirect=true";
+    }
+    
+    private void removeCategoriaSerie(Integer idSerie){
+        List<Categoriaserie> listaCategoriaSerie = null;
+        CategoriaSerieClienteREST csCliente = new CategoriaSerieClienteREST();
+        Response r = csCliente.findIntermediaByIdSerie_XML(Response.class, idSerie.toString());
+        
+        if(r.getStatus() == 200){
+            
+            GenericType<List<Categoriaserie>> genericType = new GenericType<List<Categoriaserie>>(){};
+            listaCategoriaSerie = r.readEntity(genericType);   
+        }
+        
+        if(listaCategoriaSerie != null){
+            for(Categoriaserie cs : listaCategoriaSerie){
+                csCliente.remove(cs.getIdCategoriaSerie().toString());
+            }
+        }
+    }
+    
+    private void removeSerie(Integer idSerie){
+        Serie serie = null;
+        SerieClienteREST sCliente = new SerieClienteREST();
+        Response r = sCliente.findSerieByIdSerie_JSON(Response.class, idSerie.toString());
+        
+        if(r.getStatus() == 200){
+            GenericType<Serie> genericType = new GenericType<Serie>(){};
+            serie = r.readEntity(genericType);
+        }
+        
+        if(serie != null){
+            //borramos la serie de la base de datos
+            sCliente.remove(serie.getIdSerie().toString());
+        }
+    }
+    
 }
