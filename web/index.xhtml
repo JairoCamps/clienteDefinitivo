@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Series</title>
         <!-- Parámetros necesarios para Oauth -->
@@ -38,11 +39,13 @@
         <nav class="navbar navbar-light bg-light justify-content-between">
 
             <a class="navbar-brand">Índice de Cómics</a>
+            <h:form>
+                <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}"/>
+                <h:commandButton class="btn btn-secondary" value="Añadir nueva serie" action="#{indexBean.doCrear()}" rendered="#{not loginBean.loginInvitado}"/>
+            </h:form>
             <h:form class="form-inline">
-
                 <h:inputText required ="true" class="form-control mr-sm-2" pt:placeholder="Crear Categoría" value="#{createCategoriaBean.c.nombre}"/>
                 <h:commandButton class="btn btn-success" value="Crear" action="#{createCategoriaBean.crearCategoria(createCategoriaBean.c.nombre)}"/>
-
                 <h:link outcome="login"  id="linkLogout" class="btn btn-danger" value="Cerrar Sesión" onclick="signOut();" rendered="#{not empty loginBean.emailUser}"/>
             </h:form>
         </nav>

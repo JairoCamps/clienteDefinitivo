@@ -40,7 +40,7 @@
                 <p:inputText id="autor" value="#{editarBean.serie.autor}" />
                 
                 <h:outputLabel for="descripcion" value="Descripción:" style="font-weight:bold" />
-                <p:inputTextarea rows="6" cols="33" value="#{editarBean.serie.descripcion}" />
+                <p:inputTextarea id="descripcion" rows="6" cols="33" value="#{editarBean.serie.descripcion}" />
                 
                 <p:outputLabel for="fecha" value="Fecha:" style="font-weight:bold" />
                 <p:calendar id="fecha" value="#{editarBean.serie.fecha}" showOn="button" />
@@ -51,7 +51,7 @@
                     <f:converter converterId="categoriaToStringConverter" />
                 </p:selectManyCheckbox>
             </h:panelGrid>           
-            <h:commandButton value="Editar" action="#{editarBean.doEditar()}" />
+            <h:commandButton value="Enviar" action="#{editarBean.doEditar()}" />
         </h:form>
         
     </h:body>

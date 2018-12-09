@@ -39,6 +39,7 @@ public class IndexBean implements Serializable {
     public void init(){
         listaSeries = getAllSeries();
         listaCategorias = getAllCategorias();
+        actualizarTabla();
     }
     
     public void actualizarTabla(){
@@ -118,7 +119,10 @@ public class IndexBean implements Serializable {
         }
         return null;
     }
-        
+    public String doCrear (){
+        this.setSerieIdSeleccionada(-1);
+        return "editarSerie?faces-redirect=true";
+    }
     public String doEdit (Integer idSerie){
         this.setSerieIdSeleccionada(idSerie);
         return "editarSerie?faces-redirect=true";

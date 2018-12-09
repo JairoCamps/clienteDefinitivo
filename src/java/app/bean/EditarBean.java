@@ -40,9 +40,14 @@ public class EditarBean {
     
     @PostConstruct
     public void init(){
-        serie = this.getSerieById(String.valueOf(indexBean.serieIdSeleccionada));
+        
         listaCategorias = indexBean.getListaCategoria();
-        listaCategoriasSeleccionadas = this.getCategoriasByIdSerie(serie.getIdSerie().toString());       
+        if(indexBean.serieIdSeleccionada != -1){
+            serie = this.getSerieById(String.valueOf(indexBean.serieIdSeleccionada));
+            listaCategoriasSeleccionadas = this.getCategoriasByIdSerie(serie.getIdSerie().toString());
+        }else{
+            serie= new Serie();
+        }  
     }
 
     public Serie getSerie() {
@@ -91,6 +96,17 @@ public class EditarBean {
         return null;
     }
     
+     private Serie getSerieByNameSerie(String id) {
+        SerieClienteREST serieCliente = new SerieClienteREST();
+        Response r = serieCliente.findSerieByNombre_XML(Response.class, id);
+        if (r.getStatus() == 200) {
+            GenericType<Serie> genericType = new GenericType<Serie>(){};
+            Serie s = r.readEntity(genericType);
+            return s;
+        }
+        return null;
+    }
+    
     private List<Categoria> getCategoriasByIdSerie(String id){
         CategoriaSerieClienteREST csCliente = new CategoriaSerieClienteREST();
         Response r = csCliente.findCategoriasByIdSerieIntermedio_XML(Response.class, id);
@@ -111,6 +127,11 @@ public class EditarBean {
     private void editarSerie (String id){
         SerieClienteREST serieCliente = new SerieClienteREST();
         serieCliente.edit_XML(serie, id);
+    }
+    
+    private void crearSerie (Serie s){
+        SerieClienteREST serieCliente = new SerieClienteREST();
+        serieCliente.create_XML(s);
     }
     
     private void eliminarCats (String idSerie){
@@ -134,19 +155,29 @@ public class EditarBean {
     
     public String doEditar(){
         
-        editarSerie(serie.getIdSerie().toString());
-        eliminarCats(serie.getIdSerie().toString());
-              
-        for(Categoria c : listaCategoriasSeleccionadas){
+        if(indexBean.serieIdSeleccionada != -1){ // Editar Serie
             
-            Categoriaserie nuevaCs = new Categoriaserie();
-            nuevaCs.setCategoriaidCategoria(c);
-            nuevaCs.setSerieidSerie(serie);
-            createCategoriaserie(nuevaCs);
+            editarSerie(serie.getIdSerie().toString());
+            eliminarCats(serie.getIdSerie().toString());
+              
+            for(Categoria c : listaCategoriasSeleccionadas){
+                Categoriaserie nuevaCs = new Categoriaserie();
+                nuevaCs.setCategoriaidCategoria(c);
+                nuevaCs.setSerieidSerie(serie);
+                createCategoriaserie(nuevaCs);
+            }
+        }else{ // Crear nueva serie
+            
+            crearSerie(serie);
+            
+            for(Categoria c : listaCategoriasSeleccionadas){
+                Categoriaserie nuevaCs = new Categoriaserie();
+                nuevaCs.setCategoriaidCategoria(c);
+                nuevaCs.setSerieidSerie(getSerieByNameSerie(serie.getNombre()));
+                createCategoriaserie(nuevaCs);
+            }
+         
         }
-        
-        
-        
         indexBean.init();
         return "index?faces-redirect=true";
     }
