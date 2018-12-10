@@ -16,9 +16,10 @@
         
         <!-- Librería propia con funciones para el cierre de sesión -->
         <h:outputScript library="js" name="logoutUtils.js"/>
+        <h:outputScript library="js" name="wikiApi.js"/>
         
          <script src="https://apis.google.com/js/platform.js?onload=onLoad" ></script>
-         <script type="text/javascript" src="resources/js/jquery-3.3.1.min.js"></script>
+         <script type="text/javascript" src="resources/js/jquery-3.3.1.min.js"></script> 
         
         <title> #{verSerieBean.serie.nombre}</title>
     </h:head>
@@ -58,12 +59,32 @@
                 <td>#{verSerieBean.serie.idSerie}</td>
                 <td>#{verSerieBean.serie.nombre}</td>
                 <td>#{verSerieBean.serie.descripcion}</td>
-                <td>#{verSerieBean.serie.autor}</td>
+                <td id="autor" >#{verSerieBean.serie.autor}</td>
                 <td>#{verSerieBean.serie.fecha}</td>
             </tr>
             </tbody>
         </table>
        </div> 
+        
+        <div class="container">
+        <h2>Wikipedia API</h2>
+        <table class="table">
+            <tr>
+                <th>
+                    <input id="txtSearchText" type="text" value="#{verSerieBean.serie.autor}" />
+                    &nbsp; <input id="btnSearch" type="button" value="Buscar" onclick="WikipediaAPISearch();" />
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <div class="container" id="results">
+
+                    </div>
+                </th>
+
+            </tr>
+        </table>
+    </div>
         
         <h2 align="center">Otras series del autor (API Marvel)</h2>
         <h3 align="center" id="message"> </h3>

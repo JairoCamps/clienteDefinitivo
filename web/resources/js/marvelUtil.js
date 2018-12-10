@@ -2,6 +2,7 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ * @author Pedro Ávila
  */
 var marvel = {
     render: function() {
@@ -35,9 +36,11 @@ var marvel = {
                    console.log(element.title);
                    
                     string += "<div class='col-md-3'>";
+                    string += "<a href='" + element.urls[0].url + "' target='_blank'>"
                     string += "<img src='" + element.thumbnail.path + "/portrait_fantastic." +
                         element.thumbnail.extension  + "' />";
-                    string += "<h2>" + element.title + "</h2>";
+                    string += "</a>"
+                    string += "<h3>" + element.title + "</h3>";
                     string += "</div>";
                     
                     if((i+1)%4 == 0){
