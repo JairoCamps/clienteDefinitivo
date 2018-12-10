@@ -8,14 +8,26 @@ var marvel = {
         
         var url = "http://gateway.marvel.com/v1/public/comics?orderBy=-modified&ts=1&apikey=b25a37a62f6e92fa1467788ac668064e&hash=5f69eb74d0221852f735494c961b5d3e";
         var marvelContainer = document.getElementById("marvel");
-        
+        var message = document.getElementById("message");
         
         $.ajax({
             url: url,
             type: "GET",
             
+            beforeSend: function(){
+                message.innerHTML = "Cargando...";
+            },
+            
+            complete: function(){
+                message.innerHTML = "Cargado correctamente";
+            },
+            error: function(){
+                message.innerHTML = "Problema cargando la api";
+            },
             success: function(data){
+
                var string = "";
+               string += data.attributionHTML;
                string += "<div class='row'>";
                
                 for(var i=0; i<data.data.results.length; i++){
