@@ -39,10 +39,8 @@
         <nav class="navbar navbar-light bg-light justify-content-between">
 
             <a class="navbar-brand">Índice de Cómics</a>
-            <h:form>
-                <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}"/>
-                <h:commandButton class="btn btn-secondary" value="Añadir nueva serie" action="#{indexBean.doCrear()}" rendered="#{not loginBean.loginInvitado}"/>
-            </h:form>
+              
+            
             <h:form class="form-inline">
                 <h:inputText required ="true" class="form-control mr-sm-2" pt:placeholder="Crear Categoría" value="#{createCategoriaBean.c.nombre}"/>
                 <h:commandButton class="btn btn-success" value="Crear" action="#{createCategoriaBean.crearCategoria(createCategoriaBean.c.nombre)}"/>
@@ -58,13 +56,23 @@
         <!-- Fin cabecera añadida por Pedro -->
         <div class="container">
             <h1 align="center">Lista de Series </h1> 
+            <div align="right">
+                <h:form>
+                <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}"/>
+                <h:commandButton class="btn btn-secondary" value="Añadir nueva serie" action="#{indexBean.doCrear()}" rendered="#{not loginBean.loginInvitado}"/>
+                </h:form>
+            </div>
             <h:form>
                 <h:selectOneMenu value="#{indexBean.categoriaIdSeleccionada}">
                     <f:selectItem itemLabel="Todas las Categorías" itemValue="" />
                     <f:selectItems value="#{indexBean.listaCategoria}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.idCategoria}"/>
                     <f:ajax event="valueChange" listener="#{indexBean.actualizarTabla()}" render="@all"/>
                 </h:selectOneMenu>
+                
+                
             </h:form>
+            
+            
             <hr></hr>
             <br></br>
 
@@ -109,11 +117,13 @@
                             <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}" />
                             <h:commandButton class="btn btn-primary" value="Editar" action="#{indexBean.doEdit(serie.idSerie)}" rendered="#{not loginBean.loginInvitado}"></h:commandButton>
                         </h:column>
+                        
                         <h:column>
                             <f:facet name="header">Borrar</f:facet>
-                            <h:outputText value="No tienes privilegios" rendered="#{loginBean.loginInvitado}" />
-                            <h:commandButton class="btn btn-primary" value="Borrar" action="#{indexBean.doBorrar(serie.idSerie)}" rendered="#{not loginBean.loginInvitado}"></h:commandButton>
+                            <h:outputText value="No tienes privilegios" rendered="#{not loginBean.loginAdmin}" />
+                            <h:commandButton class="btn btn-primary" value="Borrar" action="#{indexBean.doBorrar(serie.idSerie)}" rendered="#{loginBean.loginAdmin}"></h:commandButton>
                         </h:column>
+                        
                     </h:dataTable>
 
                 </h:form>

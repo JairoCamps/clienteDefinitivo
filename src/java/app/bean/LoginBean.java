@@ -5,6 +5,10 @@
  */
 package app.bean;
 
+import app.client.SerieClienteREST;
+import app.client.UsuarioClienteREST;
+import app.entity.Serie;
+import app.entity.Usuario;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -13,6 +17,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -23,7 +29,7 @@ import javax.faces.context.FacesContext;
 public class LoginBean implements Serializable {
 
     private String emailUser;
-    private boolean loginInvitado;
+    private boolean loginInvitado, loginAdmin;
     private String imageUrl;
     
     private List<String> images;
@@ -35,7 +41,7 @@ public class LoginBean implements Serializable {
     
     @PostConstruct
     public void init(){
- 
+        loginAdmin = false;
         images = new ArrayList<>();
         for(int i=1;i<=8;i++){
             images.add("portada" + i + ".jpg");
@@ -57,6 +63,8 @@ public class LoginBean implements Serializable {
             NavigationHandler nh = fc.getApplication().getNavigationHandler();
             nh.handleNavigation(fc, null, "/index.xhtml?faces-redirect=true");
         }
+        
+        this.loginAdmin = isAdmin(emailUser);
 
     }
     
@@ -76,7 +84,27 @@ public class LoginBean implements Serializable {
     public void logout(){
         this.emailUser = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailUser");
         this.imageUrl = null; 
+        this.loginAdmin = false;
     }
+    
+    
+    public boolean isAdmin(String email){
+        boolean admin = false;
+        UsuarioClienteREST cliente = new UsuarioClienteREST();
+
+        Response r = cliente.findByEmail_JSON(Response.class, email);
+        if (r.getStatus() == 200) {
+            GenericType<Usuario> genericType = new GenericType<Usuario>(){};
+            Usuario user = r.readEntity(genericType);
+            return user!=null;
+        }
+        
+        return false;
+    }
+    
+    
+    
+    
     
     //Getters y setters varios
     
@@ -107,5 +135,14 @@ public class LoginBean implements Serializable {
     public boolean isLoginInvitado() {
         return loginInvitado;
     }
+
+    public boolean isLoginAdmin() {
+        return loginAdmin;
+    }
+
+    public void setLoginAdmin(boolean loginAdmin) {
+        this.loginAdmin = loginAdmin;
+    }
     
+
 }

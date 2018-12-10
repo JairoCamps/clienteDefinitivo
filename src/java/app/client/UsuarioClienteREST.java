@@ -14,7 +14,7 @@ import javax.ws.rs.client.WebTarget;
  * [app.entity.usuario]<br>
  * USAGE:
  * <pre>
- *        UsuarioClientREST client = new UsuarioClientREST();
+ *        UsuarioClienteREST client = new UsuarioClienteREST();
  *        Object response = client.XXX(...);
  *        // do whatever with response
  *        client.close();
@@ -22,13 +22,13 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author ofviak
  */
-public class UsuarioClientREST {
+public class UsuarioClienteREST {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/ServerTesting/webresources";
 
-    public UsuarioClientREST() {
+    public UsuarioClienteREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("app.entity.usuario");
     }
@@ -77,6 +77,18 @@ public class UsuarioClientREST {
 
     public void create_JSON(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+    }
+
+    public <T> T findByEmail_XML(Class<T> responseType, String email) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findByEmail/{0}", new Object[]{email}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findByEmail_JSON(Class<T> responseType, String email) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findByEmail/{0}", new Object[]{email}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
