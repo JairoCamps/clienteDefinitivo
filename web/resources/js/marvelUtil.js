@@ -4,10 +4,39 @@
  * and open the template in the editor.
  * @author Pedro Ávila
  */
-var marvel = {
-    render: function() {
+
+function foo(callback){
+    
+    var autor = "";
+    autor += document.getElementById("autor").innerHTML;
+    var firstName = autor.substr(0,autor.indexOf(" "));
+    var lastName = autor.substr(autor.indexOf(" ")+1, autor.length-1);
+      
+    console.log(firstName);
+    console.log(lastName);
         
-        var url = "http://gateway.marvel.com/v1/public/comics?orderBy=-modified&ts=1&apikey=b25a37a62f6e92fa1467788ac668064e&hash=5f69eb74d0221852f735494c961b5d3e";
+    var url = "http://gateway.marvel.com/v1/public/creators?firstName=" + firstName +"&lastName=" + lastName + "&ts=1&apikey=b25a37a62f6e92fa1467788ac668064e&hash=5f69eb74d0221852f735494c961b5d3e";      
+    var idAutor;
+    
+    $.ajax({
+        url: url,
+        type: "GET",
+           
+        success: function(data){
+            callback(data.data.results[0].id);                
+        }
+    });
+}
+
+
+
+function comicsByAuthor(result) {
+        
+        var idAutor = result;
+        
+        
+        var url = "http://gateway.marvel.com/v1/public/comics?creators="+ idAutor.toString() +"&orderBy=-onsaleDate&ts=1&apikey=b25a37a62f6e92fa1467788ac668064e&hash=5f69eb74d0221852f735494c961b5d3e";
+        console.log(url);
         var marvelContainer = document.getElementById("marvel");
         var message = document.getElementById("message");
         
@@ -39,7 +68,7 @@ var marvel = {
                     string += "<a href='" + element.urls[0].url + "' target='_blank'>"
                     string += "<img src='" + element.thumbnail.path + "/portrait_fantastic." +
                         element.thumbnail.extension  + "' />";
-                    string += "</a>"
+                    string += "</a>";
                     string += "<h3>" + element.title + "</h3>";
                     string += "</div>";
                     
@@ -51,11 +80,10 @@ var marvel = {
                marvelContainer.innerHTML = string;
             }
           });
-    }
 };
 
-marvel.render();
 
-function sendParams(value1, value2) {
- saveInfoFromApi([ {name : 'nombreSerie', value : value1 }, {name : 'imageUrl', value: value2 } ]);
-}
+foo(comicsByAuthor);
+
+
+

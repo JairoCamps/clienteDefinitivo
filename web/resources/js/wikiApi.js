@@ -40,13 +40,13 @@
                     var markup = data.parse.text["*"];
                     var blurb = $('<div></div>').html(markup);
 
-                    // remove links as they will not work
+                    // se quitan los enlaces
                     blurb.find('a').each(function () { $(this).replaceWith($(this).html()); });
 
-                    // remove any references
+                    // se quitan referencias
                     blurb.find('sup').remove();
 
-                    // remove cite error
+                    // se quitan citas
                     blurb.find('.mw-ext-cite-error').remove();
                     $('#results').html($(blurb).find('p'));
                     $('#results').html(blurb);
