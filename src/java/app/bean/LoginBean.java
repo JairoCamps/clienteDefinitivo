@@ -57,7 +57,7 @@ public class LoginBean implements Serializable {
     public void login() {
         this.emailUser = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("emailUser");
         this.imageUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("imageUrl");
-        
+        this.loginInvitado = false;
         if(emailUser!=null && !emailUser.equals("")){
             FacesContext fc = FacesContext.getCurrentInstance();
             NavigationHandler nh = fc.getApplication().getNavigationHandler();
